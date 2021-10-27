@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="system.mapper.AuthorizationMapper">
+
+    <sql id="Base_Column_List">
+        auth_id, auth_name, role_name, description, auth_status, menu_id
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from authorization
+        where auth_id = #{authId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectDistinctAuth" resultType="String">
+        select distinct auth_name from authorization
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from authorization
+        where auth_id = #{authId,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="system.entity.Authorization">
+        insert into authorization (auth_id, auth_name, role_name,
+        description, auth_status, menu_id)
+        values (#{authId,jdbcType=INTEGER}, #{authName,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR},
+        #{description,jdbcType=VARCHAR}, #{authStatus,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" parameterType="system.entity.Authorization">
+        insert into authorization
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="authId != null">
+                auth_id,
+            </if>
+            <if test="authName != null">
+                auth_name,
+            </if>
+            <if test="roleName != null">
+                role_name,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="authStatus != null">
+                auth_status,
+            </if>
+            <if test="menuId != null">
+                menu_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="authId != null">
+                #{authId,jdbcType=INTEGER},
+            </if>
+            <if test="authName != null">
+                #{authName,jdbcType=VARCHAR},
+            </if>
+            <if test="roleName != null">
+                #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="authStatus != null">
+                #{authStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="menuId != null">
+                #{menuId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="system.entity.Authorization">
+        update authorization
+        <set>
+            <if test="authName != null">
+                auth_name = #{authName,jdbcType=VARCHAR},
+            </if>
+            <if test="roleName != null">
+                role_name = #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="authStatus != null">
+                auth_status = #{authStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="menuId != null">
+                menu_id = #{menuId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where auth_id = #{authId,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="system.entity.Authorization">
+        update authorization
+        set auth_name = #{authName,jdbcType=VARCHAR},
+        role_name = #{roleName,jdbcType=VARCHAR},
+        description = #{description,jdbcType=VARCHAR},
+        auth_status = #{authStatus,jdbcType=VARCHAR},
+        menu_id = #{menuId,jdbcType=VARCHAR}
+        where auth_id = #{authId,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectAuthByProps" parameterType="Authorization" resultType="Authorization">
+        SELECT * FROM authorization
+        <where>
+            <if test="authName != null">
+                AND auth_name = #{authName}
+            </if>
+            <if test="authStatus != null">
+                AND auth_status = #{authStatus}
+            </if>
+            <if test="roleName != null">
+                AND role_name like "%" #{roleName} "%"
+            </if>
+            <if test="description != null">
+                AND description like "%" #{description} "%"
+            </if>
+        </where>
+    </select>
+
+    <select id="getAllAuthorizations" resultType="Authorization">
+        SELECT * FROM authorization
+    </select>
+
+    <select id="getMenuIdByAuth" resultType="String">
+        SELECT menu_id FROM authorization where auth_id = #{authId}
+    </select>
+</mapper>

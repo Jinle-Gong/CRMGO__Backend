@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.javasm.system.mapper.RoleMapper">
+
+    <sql id="Base_Column_List">
+        rid, role_code, role_name, description, role_status, dept_name, auth
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from role
+        where rid = #{rid,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from role
+        where rid = #{rid,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.javasm.system.entity.Role">
+        insert into role (rid, role_code, role_name,
+        description, role_status, dept_name,
+        auth)
+        values (#{rid,jdbcType=INTEGER}, #{roleCode,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR},
+        #{description,jdbcType=VARCHAR}, #{roleStatus,jdbcType=TINYINT}, #{deptName,jdbcType=VARCHAR},
+        #{auth,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.javasm.system.entity.Role">
+        insert into role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rid != null">
+                rid,
+            </if>
+            <if test="roleCode != null">
+                role_code,
+            </if>
+            <if test="roleName != null">
+                role_name,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="roleStatus != null">
+                role_status,
+            </if>
+            <if test="deptName != null">
+                dept_name,
+            </if>
+            <if test="auth != null">
+                auth,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rid != null">
+                #{rid,jdbcType=INTEGER},
+            </if>
+            <if test="roleCode != null">
+                #{roleCode,jdbcType=VARCHAR},
+            </if>
+            <if test="roleName != null">
+                #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="roleStatus != null">
+                #{roleStatus,jdbcType=TINYINT},
+            </if>
+            <if test="deptName != null">
+                #{deptName,jdbcType=VARCHAR},
+            </if>
+            <if test="auth != null">
+                #{auth,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.javasm.system.entity.Role">
+        update role
+        <set>
+            <if test="roleCode != null">
+                role_code = #{roleCode,jdbcType=VARCHAR},
+            </if>
+            <if test="roleName != null">
+                role_name = #{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="roleStatus != null">
+                role_status = #{roleStatus,jdbcType=TINYINT},
+            </if>
+            <if test="deptName != null">
+                dept_name = #{deptName,jdbcType=VARCHAR},
+            </if>
+            <if test="auth != null">
+                auth = #{auth,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where rid = #{rid,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.javasm.system.entity.Role">
+        update role
+        set role_code = #{roleCode,jdbcType=VARCHAR},
+        role_name = #{roleName,jdbcType=VARCHAR},
+        description = #{description,jdbcType=VARCHAR},
+        role_status = #{roleStatus,jdbcType=TINYINT},
+        dept_name = #{deptName,jdbcType=VARCHAR},
+        auth = #{auth,jdbcType=VARCHAR}
+        where rid = #{rid,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectRoleByProps" parameterType="Role" resultType="Role">
+        SELECT * FROM role
+        <where>
+            <if test="deptName != null">
+                AND dept_name = #{deptName}
+            </if>
+            <if test="roleStatus != null">
+                AND role_status = #{roleStatus}
+            </if>
+            <if test="roleName != null">
+                AND role_name like "%" #{roleName} "%"
+            </if>
+            <if test="description != null">
+                AND description like "%" #{description} "%"
+            </if>
+        </where>
+    </select>
+    <select id="getAllRoles" resultType="Role">
+        SELECT * FROM role
+    </select>
+
+    <!--通过role获得auth id-->
+    <select id="getAuthIdByRole" resultType="String">
+        SELECT auth FROM role where rid = #{role}
+    </select>
+
+</mapper>

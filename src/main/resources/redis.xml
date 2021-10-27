@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="minIdle" value="${pool.minIdle}"/>
+        <property name="maxIdle" value="${pool.maxIdle}"/>
+        <property name="maxTotal" value="${pool.maxTotal}"/>
+    </bean>
+
+
+    <bean class="redis.clients.jedis.ShardedJedisPool">
+        <constructor-arg index="0" ref="poolConfig"></constructor-arg>
+        <constructor-arg index="1">
+            <list>
+                <bean class="redis.clients.jedis.JedisShardInfo">
+                    <constructor-arg index="0" value="${pool.url1}"/>
+                </bean>
+                <bean class="redis.clients.jedis.JedisShardInfo">
+                    <constructor-arg index="0" value="${pool.url2}"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+
+</beans>

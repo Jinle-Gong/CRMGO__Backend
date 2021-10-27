@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--加载配置文件-->
+    <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
+
+    <!--读取配置文件，获取连接,初始化方法-->
+    <bean id="datasource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!--创建全局的SqlsessionFactory对象(数据源，映射文件)-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="datasource"/>
+        <property name="mapperLocations" value="classpath:com/javasm/*/mapper/*.xml"/>
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <!--分页合理化配置-->
+                    <property name="properties">
+                        <value>reasonable=true</value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <!--对指定包下的所有接口创建代理对象，加入spring容器-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.javasm.*.mapper"/>
+    </bean>
+
+
+    <!--配置spring的事务管理器对象(打开会话，提交会话，回滚，关闭)-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="datasource"/>
+    </bean>
+
+    <!--通过事务通知，把事务管理器织入到带有@Transactional注解的方法-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>

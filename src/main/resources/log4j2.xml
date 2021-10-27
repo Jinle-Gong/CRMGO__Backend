@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appenders>
+        <console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{HH:mm:ss.SSS} [%t] %-5level %class %L %M -- %msg%n"/>
+        </console>
+
+        <RollingFile name="RollingFileDebug"
+                     fileName="D:/logs/debug.log"
+                     filePattern="D:/logs/$${date:yyyy-MM-dd}/debug-%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <ThresholdFilter level="DEBUG"/>
+                <ThresholdFilter level="INFO" onMatch="DENY"
+                                 onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout
+                    pattern="%d{HH:mm:ss.SSS} [%t] %-5level %class{36} %L %M - %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+
+        <RollingFile name="RollingFileInfo"
+                     fileName="D:/logs/info.log"
+                     filePattern="D:/logs/$${date:yyyy-MM-dd}/info-%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <ThresholdFilter level="INFO"/>
+                <ThresholdFilter level="WARN" onMatch="DENY"
+                                 onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout
+                    pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+
+        <RollingFile name="RollingFileWarn"
+                     fileName="D:/logs/warn.log"
+                     filePattern="D:/logs/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <ThresholdFilter level="WARN"/>
+                <ThresholdFilter level="ERROR" onMatch="DENY"
+                                 onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout
+                    pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20" min="0"/>
+        </RollingFile>
+
+        <RollingFile name="RollingFileError"
+                     fileName="D:/logs/error.log"
+                     filePattern="D:/logs/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log">
+            <Filters>
+                <ThresholdFilter level="ERROR"/>
+                <ThresholdFilter level="FATAL" onMatch="DENY"
+                                 onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout
+                    pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20" min="0"/>
+        </RollingFile>
+    </appenders>
+
+    <loggers>
+        <!--<AsyncLogger name="org.springframework" level="error" includeLocation="true">-->
+        <!--<AppenderRef ref="RollingFileError"></AppenderRef>-->
+        <!--</AsyncLogger>-->
+        <!--<AsyncLogger name="org.mybatis" level="error" includeLocation="true">-->
+        <!--<AppenderRef ref="RollingFileError"></AppenderRef>-->
+        <!--</AsyncLogger>-->
+        <!--<AsyncLogger name="com.alibaba.druid" level="error" includeLocation="true">-->
+        <!--<AppenderRef ref="RollingFileError"></AppenderRef>-->
+        <!--</AsyncLogger>-->
+        <!--<AsyncRoot level="info">-->
+        <!--<appender-ref ref="Console"/>-->
+        <!--<appender-ref ref="RollingFileDebug"/>-->
+        <!--<appender-ref ref="RollingFileInfo"/>-->
+        <!--<appender-ref ref="RollingFileWarn"/>-->
+        <!--<appender-ref ref="RollingFileError"/>-->
+        <!--</AsyncRoot>-->
+
+        <logger name="org.springframework" level="error"></logger>
+        <logger name="org.apache.ibatis" level="error"></logger>
+        <root level="info">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="RollingFileDebug"/>
+            <appender-ref ref="RollingFileInfo"/>
+            <appender-ref ref="RollingFileWarn"/>
+            <appender-ref ref="RollingFileError"/>
+        </root>
+    </loggers>
+</configuration>

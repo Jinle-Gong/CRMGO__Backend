@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.javasm.system.mapper.UserMapper">
+
+    <sql id="Base_Column_List">
+        uid, username, password, dept_name, account_status, role, position, gender, uname,
+        uphone, email
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where uid = #{uid,jdbcType=INTEGER}
+    </select>
+
+    <select id="getUserByPhone" parameterType="User" resultType="User">
+        select * from user WHERE uphone = #{uphone};
+    </select>
+
+    <select id="getUser" parameterType="User" resultType="User">
+        SELECT * FROM user WHERE username = #{username} and password = #{password};
+    </select>
+
+    <select id="selectUserByProps" parameterType="User" resultType="User">
+        SELECT * FROM user
+        <where>
+            <if test="username != null">
+                AND username like "%" #{username} "%"
+            </if>
+            <if test="deptName != null">
+                AND dept_name = #{deptName}
+            </if>
+            <if test="accountStatus != null">
+                AND account_status = #{accountStatus}
+            </if>
+            <if test="role != null">
+                AND role = #{role}
+            </if>
+            <if test="position != null">
+                AND position = #{position}
+            </if>
+            <if test="gender != null">
+                AND gender = #{gender}
+            </if>
+            <if test="uname != null">
+                AND uname like "%" #{uname} "%"
+            </if>
+        </where>
+    </select>
+
+    <select id="getAllUsers" resultType="User">
+        SELECT * FROM user
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from user
+        where uid = #{uid,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.javasm.system.entity.User">
+        insert into user (uid, username, password,
+        dept_name, account_status, role,
+        position, gender, uname,
+        uphone, email)
+        values (#{uid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+        #{deptName,jdbcType=VARCHAR}, #{accountStatus,jdbcType=TINYINT}, #{role,jdbcType=VARCHAR},
+        #{position,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT}, #{uname,jdbcType=VARCHAR},
+        #{uphone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.javasm.system.entity.User">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="uid != null">
+                uid,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="deptName != null">
+                dept_name,
+            </if>
+            <if test="accountStatus != null">
+                account_status,
+            </if>
+            <if test="role != null">
+                role,
+            </if>
+            <if test="position != null">
+                position,
+            </if>
+            <if test="gender != null">
+                gender,
+            </if>
+            <if test="uname != null">
+                uname,
+            </if>
+            <if test="uphone != null">
+                uphone,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="uid != null">
+                #{uid,jdbcType=INTEGER},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="deptName != null">
+                #{deptName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountStatus != null">
+                #{accountStatus,jdbcType=TINYINT},
+            </if>
+            <if test="role != null">
+                #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                #{position,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=TINYINT},
+            </if>
+            <if test="uname != null">
+                #{uname,jdbcType=VARCHAR},
+            </if>
+            <if test="uphone != null">
+                #{uphone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.javasm.system.entity.User">
+        update user
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="deptName != null">
+                dept_name = #{deptName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountStatus != null">
+                account_status = #{accountStatus,jdbcType=TINYINT},
+            </if>
+            <if test="role != null">
+                role = #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="position != null">
+                position = #{position,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                gender = #{gender,jdbcType=TINYINT},
+            </if>
+            <if test="uname != null">
+                uname = #{uname,jdbcType=VARCHAR},
+            </if>
+            <if test="uphone != null">
+                uphone = #{uphone,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where uid = #{uid,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.javasm.system.entity.User">
+        update user
+        set username = #{username,jdbcType=VARCHAR},
+        password = #{password,jdbcType=VARCHAR},
+        dept_name = #{deptName,jdbcType=VARCHAR},
+        account_status = #{accountStatus,jdbcType=TINYINT},
+        role = #{role,jdbcType=VARCHAR},
+        position = #{position,jdbcType=VARCHAR},
+        gender = #{gender,jdbcType=TINYINT},
+        uname = #{uname,jdbcType=VARCHAR},
+        uphone = #{uphone,jdbcType=VARCHAR},
+        email = #{email,jdbcType=VARCHAR}
+        where uid = #{uid,jdbcType=INTEGER}
+    </update>
+</mapper>
